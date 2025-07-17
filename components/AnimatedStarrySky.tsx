@@ -22,7 +22,9 @@ export function AnimatedStarrySky() {
       canvas.height = window.innerHeight;
     };
 
-    // Classe para as estrelas fixas
+    // --- CORREÇÃO APLICADA AQUI ---
+    // Agora, os métodos recebem 'ctx' como um argumento.
+
     class Star {
       x: number;
       y: number;
@@ -40,12 +42,11 @@ export function AnimatedStarrySky() {
         this.twinkleDirection = 1;
       }
 
-      draw() {
-        if (!ctx) return;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
-        ctx.fill();
+      draw(context: CanvasRenderingContext2D) { // Recebe o contexto
+        context.beginPath();
+        context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        context.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
+        context.fill();
       }
 
       update() {
@@ -56,7 +57,6 @@ export function AnimatedStarrySky() {
       }
     }
 
-    // Classe para as estrelas cadentes
     class ShootingStar {
       x: number;
       y: number;
@@ -69,26 +69,25 @@ export function AnimatedStarrySky() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height * 0.5;
         this.len = Math.random() * 80 + 10;
-        this.angle = Math.PI / 4; // Ângulo de 45 graus
+        this.angle = Math.PI / 4;
         this.speed = Math.random() * 10 + 5;
-        this.life = this.len * 2; // Vida da estrela cadente
+        this.life = this.len * 2;
       }
 
-      draw() {
-        if (!ctx) return;
+      draw(context: CanvasRenderingContext2D) { // Recebe o contexto
         const x2 = this.x - this.len * Math.cos(this.angle);
         const y2 = this.y - this.len * Math.sin(this.angle);
         
-        const gradient = ctx.createLinearGradient(this.x, this.y, x2, y2);
+        const gradient = context.createLinearGradient(this.x, this.y, x2, y2);
         gradient.addColorStop(0, `rgba(255, 255, 255, ${this.life / (this.len * 2)})`);
         gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
 
-        ctx.beginPath();
-        ctx.moveTo(this.x, this.y);
-        ctx.lineTo(x2, y2);
-        ctx.strokeStyle = gradient;
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        context.beginPath();
+        context.moveTo(this.x, this.y);
+        context.lineTo(x2, y2);
+        context.strokeStyle = gradient;
+        context.lineWidth = 2;
+        context.stroke();
       }
 
       update() {
@@ -107,27 +106,26 @@ export function AnimatedStarrySky() {
     };
 
     const animate = () => {
-      // Desenha o fundo
       const gradient = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2);
-      gradient.addColorStop(0, '#1a202c'); // Cor mais clara no centro (pode ser o seu from-zinc-900)
-      gradient.addColorStop(1, '#0a0a0a'); // Cor mais escura nas bordas (pode ser o seu to-zinc-950)
+      gradient.addColorStop(0, '#1a202c');
+      gradient.addColorStop(1, '#0a0a0a');
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Desenha as estrelas
+      // --- CORREÇÃO APLICADA AQUI ---
+      // Passamos 'ctx' para os métodos de desenho.
       stars.forEach(star => {
         star.update();
-        star.draw();
+        star.draw(ctx);
       });
 
-      // Cria e desenha as estrelas cadentes
-      if (Math.random() > 0.995) { // Probabilidade de criar uma nova estrela cadente
+      if (Math.random() > 0.995) {
         shootingStars.push(new ShootingStar());
       }
 
       shootingStars.forEach((star, index) => {
         star.update();
-        star.draw();
+        star.draw(ctx);
         if (star.life <= 0) {
           shootingStars.splice(index, 1);
         }
@@ -136,12 +134,10 @@ export function AnimatedStarrySky() {
       animationFrameId = requestAnimationFrame(animate);
     };
 
-    // Configuração inicial
     setCanvasDimensions();
     init();
     animate();
 
-    // Lida com o redimensionamento da janela
     const handleResize = () => {
       cancelAnimationFrame(animationFrameId);
       setCanvasDimensions();
@@ -151,7 +147,6 @@ export function AnimatedStarrySky() {
 
     window.addEventListener('resize', handleResize);
 
-    // Limpeza ao desmontar o componente
     return () => {
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationFrameId);
@@ -161,7 +156,7 @@ export function AnimatedStarrySky() {
   return (
     <canvas 
       ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full -z-10" // Posiciona o canvas atrás de todo o conteúdo
+      className="fixed top-0 left-0 w-full h-full -z-10"
     />
   );
 }
