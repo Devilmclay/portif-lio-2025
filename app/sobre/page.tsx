@@ -1,10 +1,11 @@
 import Image from 'next/image';
 import { MotionDiv } from '@/components/MotionDiv';
-
+import { PageWrapper } from '@/components/PageWrapper';
 export default function SobrePage() {
   return (
     // A tag <main> NÃO DEVE ter nenhuma classe de background como 'bg-white' ou 'bg-background'.
     // As classes 'container', 'mx-auto', etc., são para layout e espaçamento, estão corretas.
+    <PageWrapper>
     <main className="container mx-auto px-4 py-16 flex flex-col md:flex-row items-center justify-center gap-12">
       
       {/* Coluna da Imagem */}
@@ -13,16 +14,14 @@ export default function SobrePage() {
           src="/images/foto-perfil.jpeg"
           alt="Foto de perfil de Diogo"
           fill
-          className="rounded-full object-cover border-4 border-amber-600"
+          className="rounded-full object-cover border-4 border-blue-500"
         />
       </div>
 
       {/* Coluna do Texto */}
-      <MotionDiv 
+      <div
         className="md:w-1/2 text-center md:text-left"
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8 }}
+
       >
         <h1 className="text-4xl md:text-5xl font-bold text-slate-100">Sobre Mim</h1>
         <p className="mt-4 text-lg">
@@ -34,7 +33,8 @@ export default function SobrePage() {
           construírem uma presença online forte, moderna e eficaz. Acredito que um bom site 
           é a porta de entrada para novas oportunidades e clientes.
         </p>
-      </MotionDiv>
+      </div>
     </main>
+   </PageWrapper> 
   );
 }

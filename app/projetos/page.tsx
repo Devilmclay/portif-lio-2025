@@ -1,5 +1,6 @@
 // app/projetos/page.tsx
 import Image from 'next/image';
+import { PageWrapper } from '@/components/PageWrapper';
 // Um array de exemplo com seus projetos. No futuro, isso pode vir de um banco de dados.
 const listaDeProjetos = [
   {
@@ -27,6 +28,7 @@ const listaDeProjetos = [
 
 export default function ProjetosPage() {
   return (
+ <PageWrapper>  
  <main className="container mx-auto px-4 py-16">
   <h1 className="text-center text-4xl md:text-5xl font-bold text-slate-100 mb-12">
     Meus Projetos
@@ -45,7 +47,7 @@ export default function ProjetosPage() {
           />
         </div>
         <div className="p-6">
-          <h2 className="text-2xl font-bold text-amber-400">{projeto.nome}</h2>
+          <h2 className="text-2xl font-bold text-blue-400">{projeto.nome}</h2>
           <p className="mt-2 text-slate-300">{projeto.descricao}</p>
           <p className="mt-4 text-sm font-semibold text-slate-400">
             Tecnologias: {projeto.tecnologias}
@@ -55,6 +57,7 @@ export default function ProjetosPage() {
     ))}
   </div>
 </main>
+</PageWrapper> 
 
   );
 }

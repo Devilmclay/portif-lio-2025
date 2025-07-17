@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 import Header from "@/components/Header"; // 1. Importe o Header
+import { AnimatedStarrySky } from "@/components/AnimatedStarrySky"; 
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,9 +21,12 @@ export default function RootLayout({
     return (
     <html lang="pt-BR">
       {/* Aplicando a cor de fundo e a cor do texto padrão para todo o site */}
-      <body className={`${inter.className} bg-zinc-950 text-slate-300`}>
+     <body className={`${inter.className} text-slate-300`}>
+        <AnimatedStarrySky /> {/* 2. Adicione o componente do fundo animado aqui */}
         <Header />
-        {children}
+        <main className="relative z-10"> {/* 3. Adicione 'relative z-10' ao conteúdo principal */}
+          {children}
+        </main>
       </body>
     </html>
   );
