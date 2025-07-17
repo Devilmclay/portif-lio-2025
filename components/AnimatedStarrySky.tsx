@@ -22,9 +22,6 @@ export function AnimatedStarrySky() {
       canvas.height = window.innerHeight;
     };
 
-    // --- CORREÇÃO APLICADA AQUI ---
-    // Agora, os métodos recebem 'ctx' como um argumento.
-
     class Star {
       x: number;
       y: number;
@@ -33,7 +30,9 @@ export function AnimatedStarrySky() {
       twinkleSpeed: number;
       twinkleDirection: number;
 
-      constructor() {
+      // --- CORREÇÃO APLICADA AQUI ---
+      // O construtor agora recebe o 'canvas' como argumento.
+      constructor(canvas: HTMLCanvasElement) {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
         this.radius = Math.random() * 1.2 + 0.5;
@@ -42,7 +41,7 @@ export function AnimatedStarrySky() {
         this.twinkleDirection = 1;
       }
 
-      draw(context: CanvasRenderingContext2D) { // Recebe o contexto
+      draw(context: CanvasRenderingContext2D) {
         context.beginPath();
         context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         context.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
@@ -65,7 +64,9 @@ export function AnimatedStarrySky() {
       speed: number;
       life: number;
       
-      constructor() {
+      // --- CORREÇÃO APLICADA AQUI ---
+      // O construtor agora recebe o 'canvas' como argumento.
+      constructor(canvas: HTMLCanvasElement) {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height * 0.5;
         this.len = Math.random() * 80 + 10;
@@ -74,7 +75,7 @@ export function AnimatedStarrySky() {
         this.life = this.len * 2;
       }
 
-      draw(context: CanvasRenderingContext2D) { // Recebe o contexto
+      draw(context: CanvasRenderingContext2D) {
         const x2 = this.x - this.len * Math.cos(this.angle);
         const y2 = this.y - this.len * Math.sin(this.angle);
         
@@ -101,7 +102,9 @@ export function AnimatedStarrySky() {
       stars = [];
       shootingStars = [];
       for (let i = 0; i < 200; i++) {
-        stars.push(new Star());
+        // --- CORREÇÃO APLICADA AQUI ---
+        // Passamos 'canvas' ao criar uma nova estrela.
+        stars.push(new Star(canvas));
       }
     };
 
@@ -112,15 +115,15 @@ export function AnimatedStarrySky() {
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // --- CORREÇÃO APLICADA AQUI ---
-      // Passamos 'ctx' para os métodos de desenho.
       stars.forEach(star => {
         star.update();
         star.draw(ctx);
       });
 
+      // --- CORREÇÃO APLICADA AQUI ---
+      // Passamos 'canvas' ao criar uma nova estrela cadente.
       if (Math.random() > 0.995) {
-        shootingStars.push(new ShootingStar());
+        shootingStars.push(new ShootingStar(canvas));
       }
 
       shootingStars.forEach((star, index) => {
