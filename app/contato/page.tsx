@@ -1,6 +1,5 @@
 // app/contato/page.tsx
 import { WhatsAppButton } from "@/components/WhatsAppButton";
-import { MotionDiv } from "@/components/MotionDiv";
 import { PageWrapper } from '@/components/PageWrapper';
 import { Mail } from 'lucide-react'; // Ícone de e-mail
 

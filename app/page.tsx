@@ -1,6 +1,5 @@
 // app/page.tsx
 import Image from 'next/image';
-import { MotionDiv } from '@/components/MotionDiv';
 import { PageWrapper } from '@/components/PageWrapper'; // 1. Importe o novo componente
 export default function HomePage() {
   return (

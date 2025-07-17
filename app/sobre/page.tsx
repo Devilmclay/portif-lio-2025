@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { MotionDiv } from '@/components/MotionDiv';
 import { PageWrapper } from '@/components/PageWrapper';
 export default function SobrePage() {
   return (
