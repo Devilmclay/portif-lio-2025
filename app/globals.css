@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "tailwindcss";
+.day-sky {
+     background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 100%);
+   }
+
+.clouds {
+  /*
+    A MUDANÇA ESTÁ AQUI:
+    Aumentei a largura do SVG de 500 para 800 e ajustei as posições
+    das nuvens para criar mais espaço entre elas.
+  */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='800' height='150' viewBox='0 0 800 150'%3e%3cdefs%3e%3cfilter id='f' x='-50%25' y='-50%25' width='200%25' height='200%25'%3e%3cfeGaussianBlur stdDeviation='12'/%3e%3c/filter%3e%3c/defs%3e%3cg fill='white' fill-opacity='0.7' filter='url(%23f)'%3e%3cellipse cx='150' cy='80' rx='100' ry='40'/%3e%3cellipse cx='450' cy='60' rx='120' ry='50'/%3e%3cellipse cx='700' cy='90' rx='80' ry='30'/%3e%3c/g%3e%3c/svg%3e");
+  background-repeat: repeat-x;
+  background-position: 0 20%;
+  /* Aumentei o tamanho do fundo para corresponder à nova largura do SVG */
+  background-size: 800px auto;
+  height: 100%;
+  width: 200%;
+  /* Aumentei a duração da animação para um movimento mais lento e natural */
+  animation: moveClouds 60s linear infinite;
+}
+
+   @keyframes moveClouds {
+     from {
+       transform: translateX(0);
+     }
+     to {
+       transform: translateX(-50%); /* Move para a esquerda em metade da largura total */
+     }
+   }
+
+
+
+
+/* Regras para o tema escuro */
+.dark {
+  color: #e0e0e0; /* Cor do texto principal para o tema escuro */
+}
+
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+  color: #ffffff; /* Cor dos títulos para o tema escuro */
+}
+
+.dark p {
+  color: #90caf9; /* Cor dos links para o tema escuro */
+}
+
+

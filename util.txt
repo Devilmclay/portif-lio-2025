@@ -1,0 +1,18 @@
+# Inicializa o Git (pode dizer que já existe, sem problema)
+git init
+
+# Adiciona todos os ficheiros para serem guardados
+git add .
+
+# Cria o primeiro "ponto de salvamento"
+git commit -m "Versão com background estrelado e pagina contato adicionada, removido motion div."
+
+# Define o ramo principal como "main"
+git branch -M main
+
+# Conecta o seu projeto local ao repositório do GitHub
+# ATENÇÃO: Substitua o URL pelo URL do SEU novo repositório
+git remote add origin https://github.com/Devilmclay/portif-lio-2025
+
+# Envia o seu código para o GitHub
+git push -u origin main
