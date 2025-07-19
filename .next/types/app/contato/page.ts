@@ -1,4 +1,4 @@
-// File: C:\Users\Diogo\Site\portfolio\app\contato\page.tsx
+// File: C:\Users\Diogo\Site\meu-portfolio-novo\app\contato\page.tsx
 import * as entry from '../../../../app/contato/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
