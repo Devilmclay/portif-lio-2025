@@ -118,7 +118,7 @@ export function Chat() {
         contents: formattedHistory,
       };
       
-      const apiKey = "AIzaSyB5K5buGFT61W7s5gEHjAk0M95eu6vycXc"; // Lembre-se de colocar a sua chave aqui
+      const apiKey = "SUA_CHAVE_API_AQUI"; // Lembre-se de colocar a sua chave aqui
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
       const res = await fetch(apiUrl, {
