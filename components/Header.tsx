@@ -39,6 +39,7 @@ export default function Header() {
               <li><Link href="/sobre" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Sobre</Link></li>
               <li><Link href="/projetos" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Projetos</Link></li>
               <li><Link href="/contato" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Contato</Link></li>
+              <li><Link href="/orcamento" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Orçamento</Link></li>
             </ul>
             <ThemeSwitcher />
           </div>
@@ -83,6 +84,7 @@ export default function Header() {
                   <li><Link href="/sobre" onClick={() => setIsMenuOpen(false)} className="text-2xl font-semibold">Sobre</Link></li>
                   <li><Link href="/projetos" onClick={() => setIsMenuOpen(false)} className="text-2xl font-semibold">Projetos</Link></li>
                   <li><Link href="/contato" onClick={() => setIsMenuOpen(false)} className="text-2xl font-semibold">Contato</Link></li>
+                  <li><Link href="/orcamento" onClick={() => setIsMenuOpen(false)} className="text-2xl font-semibold">Orçamento</Link></li>
                   <li className="mt-4"><ThemeSwitcher /></li>
                 </ul>
             </div>
