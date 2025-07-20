@@ -19,7 +19,7 @@ type Budget = {
 };
 
 // O prompt inicial que "treina" a nossa IA. É a primeira mensagem que enviamos.
-const initialPrompt = `Você é um assistente de orçamentos virtual para um desenvolvedor web freelancer chamado Diogo Martins. O seu objetivo  é conversar com potenciais clientes para recolher os requisitos de um projeto de site e, no final, gerar um orçamento estimado. O seu processo é: 1. Apresente-se de forma amigável. 2. Faça perguntas para entender o que o cliente precisa. Pergunte sobre: o tipo de site (ex: Landing Page, Institucional, E-commerce), o número aproximado de páginas, e funcionalidades especiais (ex: blog, galeria de fotos, formulário de contato, sistema de agendamento). 3. Com base nas respostas, quando tiver informação suficiente, você deve fornecer a sua resposta final exclusivamente no formato JSON, com a seguinte estrutura: {"project_summary": "...", "estimated_hours": {"design": 20, "development": 40, "total": 60}, "estimated_price_brl": 2400.00, "breakdown": [{"item": "...", "description": "..."}], "next_steps": "..."}. Regra de cálculo: Use um valor base de R$ 40,00 por hora para o seu cálculo de preço. Seja realista na estimativa de horas. Uma Landing Page simples pode levar 15-20 horas, enquanto um site institucional com blog pode levar 50-60 horas. Importante: A sua primeira resposta deve ser apenas uma saudação amigável e a primeira pergunta para o cliente. Não gere o JSON na primeira resposta. O seu único objetivo final é recolher informação suficiente para gerar o JSON do orçamento. Não se desvie dessa tarefa nem ofereça ajuda para codificar ou criar o site.`;
+const initialPrompt = `Você é um assistente virtual para um desenvolvedor web freelancer chamado Diogo Martins. O seu objetivo é conversar com potenciais clientes para recolher os requisitos de um projeto de site e, no final, gerar um orçamento estimado. O seu processo é: 1. Apresente-se de forma amigável. 2. Faça perguntas para entender o que o cliente precisa. Pergunte sobre: o tipo de site (ex: Landing Page, Institucional, E-commerce), o número aproximado de páginas, e funcionalidades especiais (ex: blog, galeria de fotos, formulário de contato, sistema de agendamento). 3. Com base nas respostas, quando tiver informação suficiente, você deve fornecer a sua resposta final exclusivamente no formato JSON, com a seguinte estrutura: {"project_summary": "...", "estimated_hours": {"design": 20, "development": 40, "total": 60}, "estimated_price_brl": 2400.00, "breakdown": [{"item": "...", "description": "..."}], "next_steps": "..."}. Regra de cálculo: Use um valor base de R$ 40,00 por hora para o seu cálculo de preço. Seja realista na estimativa de horas. Uma Landing Page simples pode levar 15-20 horas, enquanto um site institucional com blog pode levar 50-60 horas. Importante: A sua primeira resposta deve ser apenas uma saudação amigável e a primeira pergunta para o cliente. Não gere o JSON na primeira resposta. O seu único objetivo final é recolher informação suficiente para gerar o JSON do orçamento. Não se desvie dessa tarefa nem ofereça ajuda para codificar ou criar o site.`;
 
 export function Chat() {
   // --- GESTÃO DE ESTADO ---
@@ -90,27 +90,20 @@ export function Chat() {
       : await callGeminiAPI(newMessages);
 
     if (response) {
-      // ✅ LÓGICA DE PARSING MELHORADA
+      // ✅ LÓGICA DE PARSING ATUALIZADA E MAIS ROBUSTA
       try {
         // A IA por vezes envolve o JSON em ```json, então limpamos isso primeiro.
         const cleanedJsonString = response.parts[0].text.replace(/```json\n|```/g, '').trim();
-        
-        // Tentamos fazer o parsing do JSON
         const parsedData = JSON.parse(cleanedJsonString);
 
         // Padronizamos a resposta: se for um array, pegamos o primeiro objeto.
         const budgetData = Array.isArray(parsedData) ? parsedData[0] : parsedData;
 
-        // Verificamos se o objeto resultante tem a estrutura completa de um orçamento.
-        if (budgetData && 
-            budgetData.project_summary && 
-            budgetData.estimated_hours && 
-            budgetData.estimated_price_brl && 
-            budgetData.breakdown && 
-            budgetData.next_steps) {
+        // Verificamos se o objeto resultante tem a estrutura de um orçamento.
+        if (budgetData && budgetData.estimated_price_brl) {
           setBudget(budgetData);
         } else {
-          // Se for um JSON válido mas não um orçamento completo, mostramos como mensagem.
+          // Se for um JSON válido mas não um orçamento, mostramos como mensagem.
           setMessages([...newMessages, response]);
         }
       } catch (error) {
@@ -128,16 +121,12 @@ export function Chat() {
         parts: msg.parts,
       }));
 
-      // ✅ CORREÇÃO PRINCIPAL: Removemos o responseMimeType para permitir respostas de texto normal
       const payload = {
         contents: formattedHistory,
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 1000,
-        }
+        // ✅ Removido responseMimeType para permitir respostas de texto e JSON
       };
       
-      const apiKey = "AIzaSyB5K5buGFT61W7s5gEHjAk0M95eu6vycXc"; // Lembre-se de colocar a sua chave aqui
+      const apiKey = "SUA_CHAVE_DA_API_VEM_AQUI"; // Lembre-se de colocar a sua chave aqui
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
       const res = await fetch(apiUrl, {
@@ -157,9 +146,10 @@ export function Chat() {
       }
       return null;
 
-    } catch (error: any) {
+    } catch (error: unknown) { // ✅ CORREÇÃO APLICADA AQUI
       console.error("Erro ao chamar a API da Gemini:", error);
-      if (error.message.includes("403")) {
+      // Verificamos se 'error' é uma instância de 'Error' para aceder a 'message' de forma segura
+      if (error instanceof Error && error.message.includes("403")) {
         setIsDemoMode(true);
         return { role: 'model', parts: [{ text: "Ocorreu um problema com a conexão à API. Ativando o modo de demonstração. A partir de agora, as respostas serão simuladas para que você possa testar a ferramenta." }] };
       }
@@ -202,7 +192,7 @@ export function Chat() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Descreva o seu projeto..."
-          className="flex-grow bg-muted border border-border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+          className="flex-grow bg-muted border border-border rounded-full px-4 py-2 focus-outline-none focus:ring-2 focus:ring-primary"
           disabled={isLoading}
         />
         <button type="submit" className="bg-primary text-primary-foreground p-3 rounded-full hover:bg-primary/90 disabled:bg-primary/50" disabled={isLoading}>
